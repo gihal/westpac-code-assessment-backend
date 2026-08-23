@@ -45,6 +45,7 @@ Assumptions
 * A local list of offensive terms will be used for nickname validation.
 * The solution intentionally uses a single account table as required by the assessment.
 * Authentication and authorization are outside the scope of this assessment.
+* Only one deployment environment is considered; therefore, a single Spring profile is used.
 
 TODO / Future Improvements
 
