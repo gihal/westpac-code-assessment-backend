@@ -63,6 +63,44 @@ If additional time were available, the following would be considered:
 * Additional observability and operational monitoring.
 
 
-Running the Application
+## Running the Application
 
-Setup and execution instructions will be added as the implementation progresses.
+### Prerequisites
+
+The following tools are required:
+
+- Java 17
+- Docker / Docker Compose
+- Git
+
+Maven does not need to be installed separately because the project includes the Maven Wrapper.
+
+### 1. Clone the Repository
+
+```bash
+git clone <repository-url>
+cd westpac-code-assessment-backend
+```
+
+### 2. Start PostgreSQL
+```
+docker compose up -d
+```
+
+### 3. Verify database container is running
+```
+docker compose ps
+```
+### 4. Build and Test and Run
+```
+./mvnw clean test
+
+./mvnw spring-boot:run
+```
+The application starts on:
+
+http://localhost:8080
+
+### 5. Swagger UI
+http://localhost:8080/swagger-ui.html
+
