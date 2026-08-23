@@ -1,4 +1,4 @@
-/*package com.westpac.account;
+package com.westpac.account;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,4 +10,4 @@ class AccountApplicationTests {
 	void contextLoads() {
 	}
 
-}*/
+}
