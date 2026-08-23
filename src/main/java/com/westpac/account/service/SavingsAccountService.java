@@ -43,20 +43,16 @@ public class SavingsAccountService {
      * @return the newly created savings account
      */
     @Transactional
-    public SavingsAccount createAccount(
-            String customerName,
-            String accountNickName
-    ) {
-        String normalizedCustomerName = customerName.trim();
-        String customerKey = normalizeCustomerKey(normalizedCustomerName);
+    public SavingsAccount createAccount(SavingsAccount account) {
 
-        validateNickname(accountNickName);
+
+        validateNickname(account.getAccountNickName());
 
         // Prevent concurrent requests for the same customer
         // from creating more than five accounts.
-        repository.lockCustomer(customerKey);
+        repository.lockCustomer(account.getCustomerKey());
 
-        long accountCount = repository.countByCustomerKey(customerKey);
+        long accountCount = repository.countByCustomerKey(account.getCustomerKey());
 
         if (accountCount >= MAX_ACCOUNTS_PER_CUSTOMER) {
             log.warn("Savings account creation rejected: account limit reached");
@@ -65,15 +61,6 @@ public class SavingsAccountService {
                     "A customer cannot have more than 5 savings accounts"
             );
         }
-
-        SavingsAccount account = new SavingsAccount(
-                UUID.randomUUID(),
-                accountNumberGenerator.generate(),
-                normalizedCustomerName,
-                customerKey,
-                normalizeNickname(accountNickName),
-                Instant.now()
-        );
 
         return repository.save(account);
     }
@@ -111,28 +98,5 @@ public class SavingsAccountService {
         }
     }
 
-    /**
-     * Normalizes the customer key by converting it to lowercase and removing
-     * @param customerName the customer name
-     * @return the normalized customer key
-     */
-    private String normalizeCustomerKey(String customerName) {
-        return customerName
-                .trim()
-                .toLowerCase(Locale.ROOT)
-                .replaceAll("\\s+", " ");
-    }
 
-    /**
-     * Normalizes the nickname by trimming whitespace.
-     * @param nickname the nickname
-     * @return the normalized nickname
-     */
-    private String normalizeNickname(String nickname) {
-        if (nickname == null || nickname.isBlank()) {
-            return null;
-        }
-
-        return nickname.trim();
-    }
 }

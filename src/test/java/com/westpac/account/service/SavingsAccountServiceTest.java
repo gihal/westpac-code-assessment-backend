@@ -12,7 +12,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.Instant;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -52,16 +54,19 @@ class SavingsAccountServiceTest {
         when(repository.countByCustomerKey("gihal mapalagama"))
                 .thenReturn(2L);
 
-        when(accountNumberGenerator.generate())
-                .thenReturn("1234567890");
-
         when(repository.save(any(SavingsAccount.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
-        SavingsAccount result = service.createAccount(
+        SavingsAccount account = new SavingsAccount(
+                UUID.randomUUID(),
+                "1234567890",
                 "Gihal Mapalagama",
-                "Holiday Fund"
+                "gihal mapalagama",
+                "Holiday Fund",
+                Instant.now()
         );
+
+        SavingsAccount result = service.createAccount(account);
 
         assertThat(result.getCustomerName())
                 .isEqualTo("Gihal Mapalagama");
